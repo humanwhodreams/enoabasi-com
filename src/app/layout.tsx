@@ -24,6 +24,7 @@ export default function RootLayout({
 			<body
 				className={cn(
 					"antialiased font-geist-sans",
+					"flex flex-col items-center justify-between min-h-screen",
 					geistSans.variable,
 					geistMono.variable,
 					bricolageGrotesque.variable
