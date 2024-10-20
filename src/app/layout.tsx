@@ -3,6 +3,7 @@ import "@/styles/globals.css";
 import { bricolageGrotesque, geistMono, geistSans } from "@/lib/fonts";
 
 import type { Metadata } from "next";
+import { RootProvider } from "fumadocs-ui/provider";
 import { cn } from "@/lib/cn";
 
 export const metadata: Metadata = {
@@ -30,7 +31,7 @@ export default function RootLayout({
 					bricolageGrotesque.variable
 				)}
 			>
-				{children}
+				<RootProvider>{children}</RootProvider>
 			</body>
 		</html>
 	);
