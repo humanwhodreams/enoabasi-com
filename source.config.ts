@@ -21,6 +21,14 @@ export const blog = defineCollections({
 
 export default defineConfig({
 	mdxOptions: {
+		rehypeCodeOptions: {
+			inline: "tailing-curly-colon",
+			themes: {
+				light: "github-light-default",
+				dark: "github-dark-default",
+			},
+		},
+		rehypePlugins: [rehypeCode],
 		remarkPlugins: [[remarkInstall, { persist: { id: "package-manager" } }]],
 	},
 });
