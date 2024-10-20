@@ -25,7 +25,7 @@ const NAVLINKS = [
 export function Header({ className }: Props) {
 	return (
 		<header
-			className={cn("sticky top-0 inset-x-0 w-full z-50 border-b", className)}
+			className={cn("sticky top-0 inset-x-0 w-full z-50 border-b bg-background", className)}
 		>
 			<nav className="flex flex-row items-center h-12 px-4 lg:px-6">
 				<Brand />
