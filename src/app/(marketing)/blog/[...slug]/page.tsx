@@ -17,6 +17,7 @@ import {
 import Link from "next/link";
 import { cn } from "@/lib/cn";
 import { buttonVariants } from "@/components/ui/button";
+import { Share } from "@/components/share/share";
 
 interface Props {
 	params: {
@@ -68,6 +69,11 @@ export default function Page({ params }: Props) {
 						<DocsTitle>{page.data.title}</DocsTitle>
 						<DocsDescription>{page.data.description}</DocsDescription>
 					</hgroup>
+						<Share
+							url={page.url}
+							title={page.data.title}
+							description={page.data.description}
+						/>
 					<DocsBody>
 						<MDX components={{ ...defaultMdxComponents, Tabs, Tab }} />
 					</DocsBody>
