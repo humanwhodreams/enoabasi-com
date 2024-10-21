@@ -87,10 +87,19 @@ export function generateMetadata({ params }: { params: { slug?: string[] } }) {
 	if (!page) notFound();
 
 	return {
+		generator: "Next.js",
+		applicationName: "Enoabasi",
 		title: page.data.title,
 		description: page.data.description,
 		authors: {
-			name: page.data.author
-		}
+			name: page.data.author,
+		},
+		creator: "Enoabasi Essien",
+		publisher: "Enoabasi Essien",
+		formatDetection: {
+			email: false,
+			address: false,
+			telephone: false,
+		},
 	} satisfies Metadata;
 }
