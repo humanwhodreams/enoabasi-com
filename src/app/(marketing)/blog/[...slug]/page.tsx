@@ -88,5 +88,9 @@ export function generateMetadata({ params }: { params: { slug?: string[] } }) {
 
 	return {
 		title: page.data.title,
+		description: page.data.description,
+		authors: {
+			name: page.data.author
+		}
 	} satisfies Metadata;
 }
