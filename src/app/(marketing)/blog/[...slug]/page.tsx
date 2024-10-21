@@ -12,7 +12,6 @@ import {
 	BreadcrumbItem,
 	BreadcrumbLink,
 	BreadcrumbList,
-	BreadcrumbPage,
 	BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import Link from "next/link";
@@ -64,11 +63,15 @@ export default function Page({ params }: Props) {
 						</BreadcrumbItem>
 					</BreadcrumbList>
 				</Breadcrumb>
-				<DocsTitle>{page.data.title}</DocsTitle>
-				<DocsDescription>{page.data.description}</DocsDescription>
-				<DocsBody>
-					<MDX components={{ ...defaultMdxComponents, Tabs, Tab }} />
-				</DocsBody>
+				<article>
+					<hgroup>
+						<DocsTitle>{page.data.title}</DocsTitle>
+						<DocsDescription>{page.data.description}</DocsDescription>
+					</hgroup>
+					<DocsBody>
+						<MDX components={{ ...defaultMdxComponents, Tabs, Tab }} />
+					</DocsBody>
+				</article>
 			</Section>
 		</>
 	);
