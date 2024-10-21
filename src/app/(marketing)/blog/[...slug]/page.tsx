@@ -69,11 +69,25 @@ export default function Page({ params }: Props) {
 						<DocsTitle>{page.data.title}</DocsTitle>
 						<DocsDescription>{page.data.description}</DocsDescription>
 					</hgroup>
+					<div className="mb-6 flex flex-col md:flex-row md:items-center md:justify-between">
+						<div className="flex items-center gap-4">
+							<p>
+								Written by
+								<span className="ml-1 font-medium text-orange-500">
+									{page.data.author}
+								</span>
+							</p>
+							&mdash;
+							<time className="text-muted-foreground">
+								{new Date(page.data.date ?? page.file.name).toDateString()}
+							</time>
+						</div>
 						<Share
 							url={page.url}
 							title={page.data.title}
 							description={page.data.description}
 						/>
+					</div>
 					<DocsBody>
 						<MDX components={{ ...defaultMdxComponents, Tabs, Tab }} />
 					</DocsBody>
