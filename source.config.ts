@@ -4,6 +4,7 @@ import {
 	frontmatterSchema,
 } from "fumadocs-mdx/config";
 
+import { isodate } from "@/lib/zod/isodate";
 import { rehypeCode } from "fumadocs-core/mdx-plugins";
 import { remarkInstall } from "fumadocs-docgen";
 import { z } from "zod";
@@ -15,6 +16,7 @@ export const blog = defineCollections({
 		date: z.string().optional(),
 		category: z.string().default("All").optional(),
 		published: z.boolean().default(true).optional(),
+		date: isodate().optional(),
 	}),
 	type: "doc",
 });
