@@ -12,11 +12,10 @@ import { z } from "zod";
 export const blog = defineCollections({
 	dir: "src/content/blog",
 	schema: frontmatterSchema.extend({
-		author: z.string().default("Anonymous").optional(),
-		date: z.string().optional(),
-		category: z.string().default("All").optional(),
-		published: z.boolean().default(true).optional(),
+		author: z.string().default("Anonymous"),
 		date: isodate().optional(),
+		category: z.string().default("All"),
+		published: z.boolean().default(true),
 	}),
 	type: "doc",
 });
