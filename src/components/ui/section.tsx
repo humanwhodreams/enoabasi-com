@@ -1,9 +1,12 @@
 import { ComponentPropsWithoutRef } from "react";
 import { cn } from "@/lib/cn";
 
-interface Props extends ComponentPropsWithoutRef<"section"> {}
-
-export function Section({ id, children, className, ...props }: Props) {
+export function Section({
+	id,
+	children,
+	className,
+	...props
+}: ComponentPropsWithoutRef<"section">) {
 	return (
 		<section
 			id={id}
