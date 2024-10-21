@@ -7,8 +7,7 @@ import { source } from "@/app/source";
 export default function Page() {
 	const posts = [...source.getPages()].sort(
 		(a, b) =>
-			new Date(b.data.date ?? b.file.name).getTime() -
-			new Date(a.data.date ?? a.file.name).getTime()
+			new Date(b.data.date!).getTime() - new Date(a.data.date!).getTime()
 	);
 
 	return (
