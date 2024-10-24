@@ -8,7 +8,7 @@ export function ScrollProgress() {
 	return (
 		<div className="h-1 w-full bg-muted/50 fixed top-12 inset-x-0 z-40">
 			<div
-				className="bg-blue-500/80 h-full rounded-e-full"
+				className="bg-blue-500/80 dark:bg-blue-500 h-full rounded-e-full"
 				style={{
 					width: `${scrollPercentage}%`,
 				}}
