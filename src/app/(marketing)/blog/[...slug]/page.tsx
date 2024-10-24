@@ -17,9 +17,9 @@ import {
 } from "@/components/ui/breadcrumb";
 import Link from "next/link";
 import { cn } from "@/lib/cn";
-import { buttonVariants } from "@/components/ui/button";
 import { Share } from "@/components/share/share";
 import { ScrollProgress } from "@/components/scroll-progress";
+import { focusRing } from "@/lib/focuses";
 
 interface Props {
 	params: {
@@ -45,7 +45,8 @@ export default function Page({ params }: Props) {
 								<Link
 									href={"/blog"}
 									className={cn(
-										buttonVariants({ variant: "ghost", size: "sm" })
+										"text-muted-foreground hover:text-primary rounded-md",
+										focusRing
 									)}
 								>
 									blog
@@ -58,7 +59,8 @@ export default function Page({ params }: Props) {
 								<Link
 									href={page.data.category!}
 									className={cn(
-										buttonVariants({ variant: "ghost", size: "sm" })
+										"text-muted-foreground hover:text-primary rounded-md",
+										focusRing
 									)}
 								>
 									{page.data.category}
