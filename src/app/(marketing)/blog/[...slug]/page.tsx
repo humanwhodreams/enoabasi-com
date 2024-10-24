@@ -1,4 +1,5 @@
 import { DocsBody, DocsDescription, DocsTitle } from "fumadocs-ui/page";
+import { InlineTOC } from "fumadocs-ui/components/inline-toc";
 
 import type { Metadata } from "next";
 import { Section } from "@/components/ui/section";
@@ -87,6 +88,9 @@ export default function Page({ params }: Props) {
 							title={page.data.title}
 							description={page.data.description}
 						/>
+					</div>
+					<div className="mb-6">
+						<InlineTOC items={page.data.toc} />
 					</div>
 					<DocsBody>
 						<MDX components={{ ...defaultMdxComponents, Tabs, Tab }} />
