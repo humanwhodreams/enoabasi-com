@@ -30,6 +30,6 @@ export default defineConfig({
 			},
 		},
 		rehypePlugins: [rehypeCode],
-		remarkPlugins: [[remarkInstall, { persist: { id: "package-manager" } }]],
+		remarkPlugins: [[remarkInstall]],
 	},
 });
