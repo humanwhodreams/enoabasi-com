@@ -16,7 +16,7 @@ import { baseUrl } from "@/utils/metadata";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/cn";
 
-export function Share({ title, url }: ShareOptions) {
+export function Share({ title, url }: Omit<ShareOptions, "description">) {
 	return (
 		<Dialog>
 			<DialogTrigger
