@@ -9,14 +9,14 @@ import {
 import { MailIcon, Share2Icon } from "lucide-react";
 
 import { Copy } from "./copy";
-import { Icons } from "../ui/icons";
+import { Icons } from "@/components/ui/icons";
 import { ShareOptions } from "./utils";
 import { Social } from "./social";
 import { baseUrl } from "@/utils/metadata";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/cn";
 
-export function Share({ title, description, url }: ShareOptions) {
+export function Share({ title, url }: ShareOptions) {
 	return (
 		<Dialog>
 			<DialogTrigger
