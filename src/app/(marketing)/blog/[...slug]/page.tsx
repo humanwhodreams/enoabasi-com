@@ -19,6 +19,7 @@ import Link from "next/link";
 import { cn } from "@/lib/cn";
 import { buttonVariants } from "@/components/ui/button";
 import { Share } from "@/components/share/share";
+import { ScrollProgress } from "@/components/scroll-progress";
 
 interface Props {
 	params: {
@@ -35,6 +36,7 @@ export default function Page({ params }: Props) {
 
 	return (
 		<>
+			<ScrollProgress />
 			<Section>
 				<Breadcrumb className="mb-4">
 					<BreadcrumbList>
@@ -86,7 +88,6 @@ export default function Page({ params }: Props) {
 						<Share
 							url={page.url}
 							title={page.data.title}
-							description={page.data.description}
 						/>
 					</div>
 					<div className="mb-6">
