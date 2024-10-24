@@ -3,6 +3,7 @@ import "@/styles/globals.css";
 import { bricolageGrotesque, geistMono, geistSans } from "@/lib/fonts";
 
 import type { Metadata } from "next";
+import { Providers } from "@/components/providers/providers";
 import { RootProvider } from "fumadocs-ui/provider";
 import { cn } from "@/lib/cn";
 
@@ -31,8 +32,11 @@ export default function RootLayout({
 					bricolageGrotesque.variable
 				)}
 			>
-				<RootProvider>{children}</RootProvider>
+				<RootProvider>
+					<Providers>{children}</Providers>
+				</RootProvider>
 			</body>
 		</html>
 	);
 }
+

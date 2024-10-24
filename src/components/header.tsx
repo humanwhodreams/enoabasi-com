@@ -1,5 +1,6 @@
 import { Brand } from "@/components/ui/brand";
 import Link from "next/link";
+import { ThemeToggle } from "./theme-toggle";
 import { buttonVariants } from "./ui/button";
 import { cn } from "@/lib/cn";
 
@@ -25,7 +26,10 @@ const NAVLINKS = [
 export function Header({ className }: Props) {
 	return (
 		<header
-			className={cn("sticky top-0 inset-x-0 w-full z-50 border-b bg-background", className)}
+			className={cn(
+				"sticky top-0 inset-x-0 w-full z-50 border-b bg-background",
+				className
+			)}
 		>
 			<nav className="flex flex-row items-center h-12 px-4 lg:px-6">
 				<Brand />
@@ -46,6 +50,10 @@ export function Header({ className }: Props) {
 						</li>
 					))}
 				</ul>
+
+				<div className="flex flex-1 justify-end">
+					<ThemeToggle />
+				</div>
 			</nav>
 		</header>
 	);
