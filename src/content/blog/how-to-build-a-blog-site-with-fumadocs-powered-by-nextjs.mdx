@@ -1,0 +1,727 @@
+---
+title: How To Build A Blog Site With Fumadocs Powered By Next.js
+description: A walkthrough to building a blog site with Fumadocs powered by Next.js.
+author: Enoabasi Essien
+date: 2024-10-23 10:40
+category: software
+---
+
+Building a blog has never been easy, there is so much that goes into creating and managing a blog. As developer, with the new era of software at your finger tips building a blog has become so easy, like taking candy from a baby. In this blog, I am going to walk you through the process of how to build a blog site with Fumadocs powered by Next.js.
+
+## What is Fumadocs?
+
+According to the [Fumadocs official website ↗](https://fumadocs.vercel.app/).
+
+> Fumadocs is a beautiful documentation framework with a complete toolchain, powered by Next.js App Router. Designed to be flexible and fast.
+
+[Next.js ↗](https://nextjs.org/docs) on its own is a powerful framework. Built on-top of [React ↗](https://react.dev/learn/start-a-new-react-project#nextjs-pages-router), it has the features needed to build really good static websites. Fumadocs just processes the `.mdx` content given, and uses a theme to make it beautiful. You can use the default themes or create your own.
+
+## Getting Started
+
+To start, there are 2 ways you can get started with Fumadocs.
+
+1. Fumadocs automatic installation &mdash; [read more ↗](https://fumadocs.vercel.app/docs/ui#automatic-installation)
+2. Manual installation &mdash; [read more ↗](https://fumadocs.vercel.app/docs/ui/manual-installation)
+
+For this blog, I will walk you through the **manual installation**, we are going to go from a blank website to a fully fledged blog website with all the Fumadocs and Next.js goodies.
+
+### Create a Next.js application
+
+It is recommend to start a new Next.js application using `create-next-app`, which sets up everything automatically for you. To create a project, run:
+
+<Callout>
+	I created my application using `pnpm`. [Read more about pnpm
+	↗](https://pnpm.io/installation)
+</Callout>
+
+```bash title="terminal"
+pnpm dlx create-next-app@latest
+```
+
+On installtion, you will see the following prompts:
+
+```
+What is your project named? my-app
+Would you like to use TypeScript? Yes
+Would you like to use ESLint? Yes
+Would you like to use Tailwind CSS? Yes
+Would you like your code inside a `src/` directory? Yes
+Would you like to use App Router? (recommended) Yes
+Would you like to use Turbopack for `next dev`? Yes
+Would you like to customize the import alias (`@/*` by default)? No
+What import alias would you like configured? @/*
+```
+
+After the prompts, `create-next-app` will create a folder with your project name and install the required dependencies.
+
+### Cleanup project structure
+
+Let's do a little bit of cleaning up. You should have a project structure that looks like this.
+
+```
+.
+├── node_modules
+├── src/
+│   └── app/
+│       ├── fonts/
+│       │   └── /* installed fonts */
+│       ├── layout.tsx
+│       ├── page.tsx
+│       └── globals.css
+├── next.config.mjs
+├── tailwind.config.ts
+├── postcss.config.mjs
+├── tsconfig.json
+├── package.json
+├── pnpm-lock.yaml
+├── .gitignore
+├── .eslintrc.json
+└── ReadMe.md
+```
+
+Start by deleting the existing `page.tsx` and create a new folder called `(marketing)`. We are utilizing the Next.js [route groups ↗](https://nextjs.org/docs/app/building-your-application/routing/route-groups). Inside the folder add a new `layout.tsx` and `page.tsx` file.
+
+```
+.
+└── src
+    └── app
+        ├── (marketing)
+        │   ├── layout.tsx
+        │   └── page.tsx
+        ├── layout.tsx
+        └── globals.css
+```
+
+Inside `layout.tsx`, add the following. This serves as a base for our layout across all pages.
+
+```tsx title="(marketing)/layout.tsx"
+import { ReactNode } from "react";
+
+interface Props {
+	children: ReactNode;
+}
+
+export default function Layout({ children }: Props) {
+	return (
+		<>
+			<header>Header component</header>
+			<main>{children}</main>
+		</>
+	);
+}
+```
+
+Inside `page.tsx`, add the following. The will serve as the base for our home page.
+
+```tsx title="(marketing)/layout.tsx"
+export default function Page() {
+	return (
+		<>
+			<section>Home page</section>
+		</>
+	);
+}
+```
+
+Now that the base structure is complete, let's head to the `globals.css` and remove the boilerplate code there. Remove every other code except the following:
+
+```css title="globals.css"
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+```
+
+Wonderful, we now have a clean project to start building our blog on. To speed up development, we would use [Shadcn/ui ↗](https://ui.shadcn.com/docs) for our general styling and components.
+
+## Installing Shadcn/ui
+
+Shadcn/ui is a collection of beautifully designed components that you can copy and paste into your apps. Accessible. Customizable. Open Source. It is built on top of [Radix-ui ↗](https://www.radix-ui.com/) and styled using [Tailwindcss ↗](https://tailwindcss.com/). The library allows you as a developer have full control over the components, how they look, how they feel, and how they work. It's all yours.
+
+To get started, Run the `init` command to setup shadcn/ui in an existing project.
+
+```bash title="terminal"
+pnpm dlx shadcn@latest init
+```
+
+You will be asked a few questions to configure `components.json`:
+
+```
+Which style would you like to use? › Default
+Which color would you like to use as base color? › Zinc
+Do you want to use CSS variables for colors? › yes
+```
+
+With the setup complete let's do some refactoring of the `components.json`. We are going to change the utils path alias from `@/lib/utils` to `@/lib/cn`.
+
+```json title="components.json"
+{
+	"$schema": "https://ui.shadcn.com/schema.json",
+	"style": "default",
+	"rsc": true,
+	"tsx": true,
+	"tailwind": {
+		"config": "tailwind.config.ts",
+		"css": "src/app/globals.css",
+		"baseColor": "zinc",
+		"cssVariables": true,
+		"prefix": ""
+	},
+	"aliases": {
+		"components": "@/components",
+		"utils": "@/lib/cn", // [!code highlight]
+		"ui": "@/components/ui",
+		"lib": "@/lib",
+		"hooks": "@/hooks"
+	}
+}
+```
+
+And change the filename `utils.ts` to `cn.ts` inside the `lib` directory.
+
+We can now add in our components. We would add the following components:
+
+- Breadcrumb
+- Button
+
+Use the code below to add the components:
+
+```bash title="terminal"
+pnpm dlx shadcn@latest add breadcrumb button
+```
+
+## Configure global fonts
+
+Let us utilize the fonts in our `layout.tsx`, these fonts will be accessible through tailwind across our code base. In your `tailwind.config.ts`, add the following inside the `theme`, `extend` object.
+
+```ts title="tailwind.config.ts"
+fontFamily: {
+    "geist-sans": "var(--font-geist-sans)",
+    "geist-mono": "var(--font-geist-mono)",
+},
+```
+
+The font variables `--font-geist-sans` and `--font-geist-mono` are defined inside our root `layout.tsx`. Inside root `layout.tsx`, add to the `body` tag so that it can be used across our site.
+
+```tsx title="layout.tsx"
+// [!code word:font-geist-sans]
+import { cn } from "@/lib/cn";
+
+/* rest of code */
+<body
+	className={cn(
+		"antialiased font-geist-sans",
+		geistSans.variable,
+		geistMono.variable
+	)}
+>
+	{children}
+</body>;
+/* rest of code */
+```
+
+The font for the whole application would be set to `font-geist-sans`. To learn more about optimizing fonts in Next.js, [learn more ↗](https://nextjs.org/docs/app/building-your-application/optimizing/fonts).
+
+Also, in the `globals.css`, add the following for `code` tags.
+
+```css title="globals.css"
+@layer base {
+	code {
+		@apply font-geist-mono;
+	}
+}
+```
+
+## Setting up Fumadocs
+
+The Fumadocs framework is divided into 3 main parts.
+
+1. [Fumadocs core ↗](https://fumadocs.vercel.app/docs/headless)
+2. [Fumadocs ui ↗](https://fumadocs.vercel.app/docs/ui)
+3. Fumadocs content source
+   1. [Fumadocs mdx ↗](https://fumadocs.vercel.app/docs/mdx)
+   2. [Content collections ↗](https://fumadocs.vercel.app/docs/headless/content-collections)
+
+We'll start by installing the necessary dependencies.
+
+```bash title="terminal"
+pnpm add fumadocs-ui fumadocs-core
+```
+
+After installation, we can then choose a content source. The 2 supported content sources are `fumadocs-mdx` and `content-collections`.
+
+1. [Fumadocs mdx ↗](https://fumadocs.vercel.app/docs/mdx)
+2. [Content collections ↗](https://fumadocs.vercel.app/docs/headless/content-collections)
+
+We will be using **Fumadocs mdx** as our primary content source.
+
+### Installation
+
+Fumadocs MDX is the official content source of Fumadocs. It parses frontmatter and is bundled with many MDX plugins for a rich content site.
+
+We'll start by installing the necessary dependencies.
+
+```bash title="terminal"
+pnpm add fumadocs-mdx @types/mdx fumadocs-docgen
+```
+
+Add the plugin to your `next.config.mjs` file.
+
+```js title="next.config.mjs"
+import { createMDX } from "fumadocs-mdx/next";
+
+const withMDX = createMDX();
+
+/** @type {import('next').NextConfig} */
+const config = {
+	reactStrictMode: true,
+};
+
+export default withMDX(config);
+```
+
+After adding the plugins, launch the development server, `pnpm dev`, to generate fumadocs `.source` folder. This folder contains all parsed files, you should add it to `.gitignore`.
+
+### Configurations
+
+To configure Fumadocs, create a `source.config.ts` file at the root of your project.
+
+```
+// [!code word:source.config.ts]
+.
+├── src/
+│   └── /* other folders */
+└── source.config.ts
+```
+
+Install `zod`. Zod is used to validate our schemas. The `schema` represents the frontmatter of Fumadocs content. 
+
+```bash title="terminal"
+pnpm add zod
+```
+
+In your `source.config.ts` file, add the following import:
+
+```ts title="source.config.ts"
+import {
+	defineCollections,
+	defineConfig,
+	frontmatterSchema,
+} from "fumadocs-mdx/config";
+
+import { rehypeCode } from "fumadocs-core/mdx-plugins";
+import { remarkInstall } from "fumadocs-docgen";
+import { z } from "zod";
+```
+
+Let's create a collection for our **blog**. A collection defines the structure of our parsed data. [Read more about fumadocs collections ↗](https://fumadocs.vercel.app/docs/mdx/collections).
+
+Before creating the blog collection, let's add a custom schema for handling dates. This is referenced from the [Velite.js repository ↗](https://github.com/zce/velite/blob/main/src/schemas/isodate.ts). [Velite ↗](https://velite.js.org/) is another content framework worth checking out.
+
+```ts title="source.config.ts"
+// imports
+
+/*
+  Isodate schema
+
+  References:
+      - velite.js: https://github.com/zce/velite/blob/main/src/schemas/isodate.ts
+*/
+const isodate = () =>
+	z
+		.string()
+		.refine((value) => !isNaN(Date.parse(value)), "Invalid date string")
+		.transform<string>((value) => new Date(value).toISOString()); // returns an ISO date value
+
+// blog collection
+```
+
+Let's create the **blog** collection.
+
+```ts title="source.config.ts"
+// [!code word:isodate]
+export const blog = defineCollections({
+	dir: "src/content/blog",
+	schema: frontmatterSchema.extend({
+		author: z.string().default("Anonymous"),
+		date: isodate().optional(),
+		category: z.string().default("All"),
+		published: z.boolean().default(true),
+	}),
+	type: "doc",
+});
+```
+
+<Callout title="Good To Know">
+`frontmatterSchema` is a schema provided by Fumadocs with prior frontmatter keys such as `title`, `description`, `icon`, `full`, and `openapi`.
+</Callout>
+
+| Key      | Definitions                                                                           |
+| -------- | ------------------------------------------------------------------------------------- |
+| `dir`    | Directories to scan input files                                                       |
+| `type`   | The accepted type of collection. Either `"doc"` or `"meta"`                           |
+| `schema` | The Zod schema to validate file data (frontmatter on doc type, content on meta type). |
+
+Let's add global configurations for fumadocs. These configurations will be applied to all `.mdx` files. Fumadocs configures mdx using `rehypeCode`, `rehypePlugins`, and `remarkPlugins`.
+
+```ts title="source.config.ts"
+export default defineConfig({
+	mdxOptions: {
+		rehypeCodeOptions: {
+			inline: "tailing-curly-colon",
+			themes: {
+				light: "github-light-default",
+				dark: "github-dark-default",
+			},
+		},
+		rehypePlugins: [rehypeCode],
+		remarkPlugins: [[remarkInstall]], // package manager tabs.
+	},
+});
+```
+
+To learn more about the plugins, [visit here ↗](https://fumadocs.vercel.app/docs/headless/mdx).
+
+### Post Install
+
+You can add a post install script to generate types before executing CLI tools (e.g. ESLint).
+
+```json title="package.json"
+{
+  "scripts": {
+    "postinstall": "fumadocs-mdx"
+  }
+}
+```
+
+### Resolving Files
+
+Let's configure the path alias for `.source` data. In the `tsconfig.json`, under `"paths"`, add the following:
+
+```json title="tsconfig.json"
+{
+    "paths": {
+        // other paths
+        "~/content*": ["./.source"]
+    }
+}
+```
+
+To integrate with Fumadocs, create a `source.ts` file inside the `app` directory:
+
+```ts title="app/source.ts"
+import { blog } from "~/content";
+import { createMDXSource } from "fumadocs-mdx";
+import { loader } from "fumadocs-core/source";
+
+export const source = loader({
+	baseUrl: "/blog",
+	source: createMDXSource(blog, []),
+});
+```
+To learn more about the `source` API, [visit here ↗](https://fumadocs.vercel.app/docs/headless/source-api).
+
+🎉 That's it you are done with setting up Fumadocs core and content source.
+
+### Root Provider
+
+Wrap the entire application inside a Fumadocs [Root Provider ↗](https://fumadocs.vercel.app/docs/ui/blocks/root-provider).
+
+```tsx title="src/app/layout.tsx"
+import { RootProvider } from "fumadocs-ui/provider"; // [!code highlight]
+import { cn } from "@/lib/cn";
+
+/* rest of code */
+<body
+	className={cn(
+		"antialiased font-geist-sans",
+		geistSans.variable,
+		geistMono.variable
+	)}
+>
+	<RootProvider>{children}</RootProvider> // [!code highlight]
+</body>;
+/* rest of code */
+```
+
+### Styling Fumadocs
+
+To setup up Fumadocs to work with Tailwind CSS, utilize the Fumadocs official Tailwind CSS plugin.
+
+```ts title="tailwind.config.ts"
+import { createPreset } from 'fumadocs-ui/tailwind-plugin'; // [!code highlight]
+
+/** @type {import('tailwindcss').Config} */
+export default {
+  darkMode: 'class',
+  presets: [createPreset()], // [!code highlight]
+  content: [
+    "./node_modules/fumadocs-ui/dist/**/*.js", // [!code highlight]
+    "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/content/**/*.mdx",
+  ],
+  // rest of tailwind code...
+};
+```
+
+🎉 With the `tailwind.config.ts` completed, let's setup the page that will render your blog contents.
+
+## Display the list of blog posts
+
+In the `(marketing)` route group, create a folder `blog` and inside the folder create a file `page.tsx`. This file will contain the list of blog posts in our `content/blog` directory.
+
+In your `page.tsx` file, add the following imports:
+
+```tsx title="blog/page.tsx"
+import { Fragment } from "react";
+import Link from "next/link";
+import { cn } from "@/lib/cn";
+import { source } from "@/app/source"
+```
+
+In the `Page()` function, create a sort function that sorts all our posts by their date.
+
+```tsx title="blog/page.tsx"
+export default function Page() {
+    const posts = [...source.getPages()].sort( // [!code highlight]
+        (a, b) => // [!code highlight]
+            new Date(b.data.date!).getTime() - new Date(a.data.date!).getTime() // [!code highlight]
+    ) // [!code highlight]
+
+    // rest of code...
+}
+```
+
+Let's return all the posts, we will return only the posts that have `published` set to `true{:ts}`. Any post that returns `false{:ts}` would not be displayed.
+
+```tsx title="blog/page.tsx"
+// [!code word:published]
+export default function Page() {
+	return (
+		<div className="flex flex-col gap-2 p-24">
+			{posts.map((post) => { // [!code highlight]
+				return (
+					<Fragment key={post.url}>
+						{post.data.published ? ( // [!code highlight]
+							<Link
+								href={post.url}
+								className={cn(
+									"flex flex-col bg-fd-card p-4 transition-colors hover:bg-fd-accent hover:text-fd-accent-foreground"
+								)}
+							>
+								<hgroup>
+									<h3>{post.data.title}</h3>
+									<p className="text-sm text-fd-muted-foreground mt-2">
+										{post.data.description}
+									</p>
+								</hgroup>
+								<time className="pt-4 mt-auto text-xs text-fd-muted-foreground">
+									{new Date(
+										post.data.date ?? post.file.name
+									).toDateString()}
+								</time>
+							</Link>
+						) : null}
+					</Fragment>
+				);
+			})}
+		</div>
+	)
+}
+```
+
+You should see a list of all your blog posts on the `/blog` route.
+
+## Displaying a specific blog post
+
+To display a specific blog post we will utilize Next.js [dynamic routes ↗](https://nextjs.org/docs/app/building-your-application/routing/dynamic-routes#catch-all-segments). In the `blog` directory, create a folder `[...slug]`, and insdie the folder create a file `page.tsx`.
+
+```
+.
+└── src
+    └── (marketing)
+        └── blog
+            └── [...slug]
+                └── page.tsx
+```
+
+Let's add the following imports:
+
+```tsx title="[...slug]/page.tsx"
+import { DocsBody, DocsDescription, DocsTitle } from "fumadocs-ui/page";
+import { InlineTOC } from "fumadocs-ui/components/inline-toc";
+
+import type { Metadata } from "next";
+import defaultMdxComponents from "fumadocs-ui/mdx";
+import { notFound } from "next/navigation";
+import { source } from "@/app/source";
+
+import { Tab, Tabs } from "fumadocs-ui/components/tabs";
+import {
+	Breadcrumb,
+	BreadcrumbItem,
+	BreadcrumbLink,
+	BreadcrumbList,
+	BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
+import Link from "next/link";
+import { cn } from "@/lib/cn";
+import { buttonVariants } from "@/components/ui/button";
+```
+<Callout>
+When using **Next.js dynamic routes**, the pages come with `params` props that serve as dynamic segments. For example, `blog/hello-world`, the `param` segment returned is `hello-world`. The return type of a dynamic route is a `string[]`.
+</Callout>
+
+After the imports, add the following `prop` for getting the `params`.
+
+```tsx title="[...slug]/page.tsx"
+// imports
+interface Props {
+	params: {
+		slug?: string[];
+	};
+}
+// rest of code...
+```
+
+let's now add the logic for getting a single post.
+
+```tsx title="[...slug]/page.tsx"
+export default function Page({ params }: Props) {
+	const page = source.getPage(params.slug);
+
+	if (!page) notFound();
+
+	const MDX = page.data.body;
+
+	return (
+		// rest of code...
+	)
+}
+```
+
+<Callout>
+`MDX` is a `React.ReactElement` that returns a component for parsing MDX related components and content from the parsed output of `page`.
+</Callout>
+
+Let's render out our blog post.
+
+```tsx title="[...slug]/page.tsx"
+export default function Page({ params }: Props) {
+	// logic...
+
+	return (
+		<>
+			<section>
+				<Breadcrumb className="mb-4">
+					<BreadcrumbList>
+						<BreadcrumbItem>
+							<BreadcrumbLink asChild>
+								<Link
+									href={"/blog"}
+									className={cn(
+										buttonVariants({ variant: "ghost", size: "sm" })
+									)}
+								>
+									blog
+								</Link>
+							</BreadcrumbLink>
+						</BreadcrumbItem>
+						<BreadcrumbSeparator />
+						<BreadcrumbItem>
+							<BreadcrumbLink asChild>
+								<Link
+									href={page.data.category!}
+									className={cn(
+										buttonVariants({ variant: "ghost", size: "sm" })
+									)}
+								>
+									{page.data.category}
+								</Link>
+							</BreadcrumbLink>
+						</BreadcrumbItem>
+					</BreadcrumbList>
+				</Breadcrumb>
+				<article>
+					<hgroup>
+						<DocsTitle>{page.data.title}</DocsTitle>
+						<DocsDescription>{page.data.description}</DocsDescription>
+					</hgroup>
+					<div className="mb-6 flex items-center gap-4">
+						<p>
+							Written by
+							<span className="ml-1 font-medium text-orange-500">
+								{page.data.author}
+							</span>
+						</p>
+						&mdash;
+						<time className="text-muted-foreground">
+							{new Date(page.data.date ?? page.file.name).toDateString()}
+						</time>
+					</div>
+					<div className="mb-6">
+						<InlineTOC items={page.data.toc} />
+					</div>
+					<DocsBody>
+						<MDX components={{ ...defaultMdxComponents, Tabs, Tab }} />
+					</DocsBody>
+				</article>
+			</section>
+		</>
+	)
+}
+```
+
+Let's handle search engine optimization, Fumadocs provides APIs that help handling SEO a breeze. Add the following below the `Page()` component.
+
+```tsx title="[...slug]/page.tsx"
+export async function generateStaticParams() {
+	return source.generateParams();
+}
+
+export function generateMetadata({ params }: { params: { slug?: string[] } }) {
+	const page = source.getPage(params.slug);
+
+	if (!page) notFound();
+
+	return {
+		title: page.data.title,
+		description: page.data.description,
+	} satisfies Metadata;
+}
+```
+
+🎉 Our blog page is ready, let's add some content to be displayed.
+
+## Adding contents
+
+Inside `content/blog`, create an example file `hello-world.mdx`. The filename is used as the slug for finding a post. The URL will be represented as `blog/hello-world`.
+
+<Callout title="Good To Know">
+For better organization, create a folder and inside create an `index.mdx` file. The folder name will be the `slug` of the post.
+</Callout>
+
+```md title="content/blog/hello-world.mdx"
+---
+title: Hello world
+description: Creating a blog with Fumadocs powered by Next.js
+date: 2002-10-24 10:24
+author: Humanwhodreams
+category: software
+---
+
+## Introduction
+
+Dear reader,
+
+This is my first blog post made with Fumadocs, powered by Next.js. I hope you like it. This was a tutorial by @humawhodreams.
+
+Regards,
+humawhodreams.
+
+Happy coding.
+```
+
+🎉 I hope this was impactful to you and would love to see what you build.
+
+Happy coding.
