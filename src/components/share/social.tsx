@@ -11,7 +11,7 @@ export function Social({ url, title, children, className }: Props) {
 	return (
 		<a
 			title={title}
-			target="_blank"
+			// target="_blank"
 			href={url}
 			rel="noopener noreferrer"
 			className={cn(
