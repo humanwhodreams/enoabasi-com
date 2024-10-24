@@ -10,16 +10,8 @@ interface Props {
 
 const NAVLINKS = [
 	{
-		label: "work",
-		href: "/work",
-	},
-	{
 		label: "blog",
 		href: "/blog",
-	},
-	{
-		label: "about",
-		href: "/about",
 	},
 ];
 
