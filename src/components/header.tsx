@@ -26,7 +26,7 @@ export function Header({ className }: Props) {
 			<nav className="flex flex-row items-center h-12 px-4 lg:px-6">
 				<Brand />
 
-				<ul className="flex items-center gap-2 lg:ml-6">
+				<ul className="flex items-center gap-2 ml-6">
 					{NAVLINKS.map((link) => (
 						<li key={link.href}>
 							<Link
