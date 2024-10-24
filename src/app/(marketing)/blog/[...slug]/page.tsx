@@ -113,7 +113,9 @@ export function generateMetadata({ params }: { params: { slug?: string[] } }) {
 	return {
 		generator: "Next.js",
 		applicationName: "Enoabasi",
-		title: page.data.title,
+		title: {
+			absolute: page.data.title,
+		},
 		description: page.data.description,
 		authors: {
 			name: page.data.author,
